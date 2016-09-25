@@ -40,7 +40,7 @@ usage(const char* pname) {
     "Usage: %s [-h] [-n <name>]\n"
     "  -d <id>:       Display ID. (%d)\n"
     "  -n <name>:     Change the name of the abtract unix domain socket. (%s)\n"
-    "  -p <port>:     Listening port number of the TCP/IP socket.\n"
+    "  -p <port>:     Listening port number of the UDP socket.\n"
     "  -P <value>:    Display projection (<w>x<h>@<w>x<h>/{0|90|180|270}).\n"
     "  -q <quality>:  Jpeg export quality {0-100} (80).\n"
     "  -s:            Take a screenshot and output it to stdout. Needs -P.\n"

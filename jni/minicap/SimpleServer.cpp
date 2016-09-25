@@ -44,7 +44,7 @@ SimpleServer::start(const char* sockname) {
 
 int
 SimpleServer::start(int port) {
-  int sfd = socket(AF_INET, SOCK_STREAM, 0);
+  int sfd = socket(AF_INET, SOCK_DGRAM, 0);
 
   if (sfd < 0) {
     return sfd;
@@ -54,7 +54,7 @@ SimpleServer::start(int port) {
   memset(&addr, 0, sizeof(addr));
 
   addr.sin_family        = PF_INET;
-  addr.sin_addr.s_addr   = INADDR_ANY;
+  addr.sin_addr.s_addr   = htonl(INADDR_LOOPBACK);
   addr.sin_port          = htons(port);
   if (::bind(sfd, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) < 0) {
     ::close(sfd);
