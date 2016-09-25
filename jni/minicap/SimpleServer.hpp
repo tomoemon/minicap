@@ -9,6 +9,9 @@ public:
   int
   start(const char* sockname);
 
+  int
+  start(int port);
+
   int accept();
 
 private:
