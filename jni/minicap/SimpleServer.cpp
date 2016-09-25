@@ -51,12 +51,12 @@ SimpleServer::start(int port) {
   }
 
   struct sockaddr_in addr;
-  memset(&addr, 0, sizeof(addr));
+  memset(&addr, 0, sizeof(struct sockaddr_in));
 
-  addr.sin_family        = PF_INET;
+  addr.sin_family        = AF_INET;
   addr.sin_addr.s_addr   = htonl(INADDR_LOOPBACK);
   addr.sin_port          = htons(port);
-  if (::bind(sfd, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) < 0) {
+  if (::bind(sfd, (struct sockaddr *)&addr, sizeof(struct sockaddr)) < 0) {
     ::close(sfd);
     return -1;
   }
