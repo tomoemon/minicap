@@ -5,7 +5,7 @@
 
 JpgEncoder::JpgEncoder(unsigned int prePadding, unsigned int postPadding)
   : mTjHandle(tjInitCompress()),
-    mSubsampling(TJSAMP_420),
+    mSubsampling(TJSAMP_444),
     mEncodedData(NULL),
     mPrePadding(prePadding),
     mPostPadding(postPadding),
