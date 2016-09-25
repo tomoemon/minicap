@@ -44,7 +44,7 @@ SimpleServer::start(const char* sockname) {
 
 int
 SimpleServer::start(int port) {
-  int sfd = socket(AF_INET, SOCK_DGRAM, 0);
+  int sfd = socket(AF_INET, SOCK_STREAM, 0);
 
   if (sfd < 0) {
     return sfd;
