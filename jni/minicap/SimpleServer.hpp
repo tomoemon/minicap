@@ -12,6 +12,7 @@ public:
   int accept();
 
 private:
+  int port = 0;
   int mFd;
 };
 

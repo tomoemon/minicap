@@ -40,8 +40,9 @@ usage(const char* pname) {
     "Usage: %s [-h] [-n <name>]\n"
     "  -d <id>:       Display ID. (%d)\n"
     "  -n <name>:     Change the name of the abtract unix domain socket. (%s)\n"
+    "  -p <port>:     Listening port number of the TCP/IP socket.\n"
     "  -P <value>:    Display projection (<w>x<h>@<w>x<h>/{0|90|180|270}).\n"
-    "  -q <quality>:  Jpeg export quality (0-100 default:80).\n"
+    "  -q <quality>:  Jpeg export quality {0-100} (80).\n"
     "  -s:            Take a screenshot and output it to stdout. Needs -P.\n"
     "  -S:            Skip frames when they cannot be consumed quickly enough.\n"
     "  -t:            Attempt to get the capture method running, then exit.\n"
@@ -214,15 +215,19 @@ main(int argc, char* argv[]) {
   bool skipFrames = false;
   bool testOnly = false;
   Projection proj;
+  int port = 0;
 
   int opt;
-  while ((opt = getopt(argc, argv, "d:n:P:q:siSth")) != -1) {
+  while ((opt = getopt(argc, argv, "d:n:p:P:q:siSth")) != -1) {
     switch (opt) {
     case 'd':
       displayId = atoi(optarg);
       break;
     case 'n':
       sockname = optarg;
+      break;
+    case 'p':
+      port = atoi(optarg);
       break;
     case 'P': {
       Projection::Parser parser;
@@ -426,9 +431,17 @@ main(int argc, char* argv[]) {
     return EXIT_SUCCESS;
   }
 
-  if (!server.start(sockname)) {
-    MCERROR("Unable to start server on namespace '%s'", sockname);
-    goto disaster;
+  if (port > 0) {
+    if (!server.start(port)) {
+      MCERROR("Unable to start server on port '%d'", port);
+      goto disaster;
+    }
+  }
+  else {
+    if (!server.start(sockname)) {
+      MCERROR("Unable to start server on namespace '%s'", sockname);
+      goto disaster;
+    }
   }
 
   // Prepare banner for clients.

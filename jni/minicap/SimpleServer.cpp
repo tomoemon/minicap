@@ -42,8 +42,41 @@ SimpleServer::start(const char* sockname) {
 }
 
 int
+SimpleServer::start(int port) {
+  int sfd = socket(AF_INET, SOCK_STREAM, 0);
+
+  if (sfd < 0) {
+    return sfd;
+  }
+
+  struct sockaddr_in addr;
+  memset(&addr, 0, sizeof(addr));
+
+  addr.sin_family        = PF_INET;
+  addr.sin_addr.s_addr   = INADDR_ANY;
+  addr.sin_port          = htons(port);
+  if (::bind(sfd, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) < 0) {
+    ::close(sfd);
+    return -1;
+  }
+
+  ::listen(sfd, 1);
+
+  this->port = port;
+  this->mFd = sfd;
+  return this->mFd;
+}
+
+int
 SimpleServer::accept() {
-  struct sockaddr_un addr;
-  socklen_t addr_len = sizeof(addr);
-  return ::accept(mFd, (struct sockaddr *) &addr, &addr_len);
+  if (this->port > 0) {
+    struct sockaddr_in iaddr;
+    socklen_t iaddr_len = sizeof(iaddr);
+    return ::accept(this->mFd, (struct sockaddr *)&iaddr, &iaddr_len);
+  }
+  else {
+    struct sockaddr_un uaddr;
+    socklen_t uaddr_len = sizeof(uaddr);
+    return ::accept(this->mFd, (struct sockaddr *) &uaddr, &uaddr_len);
+  }
 }
